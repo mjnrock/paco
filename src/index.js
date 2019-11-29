@@ -18,7 +18,8 @@ import ExampleStore from "./stores/_ExampleStore";
 
 //? window.store for debugging, remove in prod
 let store = window.store = {
-    ExampleStore
+    ExampleStore,
+    OtherStore: ExampleStore
 };
 
 const Root = (
