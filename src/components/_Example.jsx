@@ -1,6 +1,9 @@
 import React, { Component } from "react";
+import { inject, observer } from "mobx-react";
 
-export default class List extends Component {
+@inject("store")
+@observer
+export default class Example extends Component {
     render() {
         return (
             <div className={ `container mt2 ${ this.props.className }` }>

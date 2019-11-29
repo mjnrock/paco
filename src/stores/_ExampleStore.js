@@ -3,15 +3,15 @@ import { GenerateUUID } from "../lib/helper";
 
 import IDBKeyValStore from "./IDBKeyValStore";
 
-class MainStore extends IDBKeyValStore {
+class ExampleStore extends IDBKeyValStore {
     @observable command = "";
     @observable items = {};
 
     constructor() {
-        super("MainStore");
+        super("ExampleStore");
 
         //? Store["items"], this[ "items" ], defaultValue?
-        this.pull("items", "items", {});
+        this.PullFromStore("items", "items", {});
     }
     
     @action
@@ -20,7 +20,7 @@ class MainStore extends IDBKeyValStore {
 
         this.items[ uuid ] = item;
         //? Store["items"], this[ "items" ]
-        this.push("items", "items");
+        this.PushToStore("items", "items");
 
         return uuid;
     };
@@ -28,7 +28,7 @@ class MainStore extends IDBKeyValStore {
     @action
     removeItem = (uuid) => {
         delete this.items[ uuid ];
-        this.push("items", "items");
+        this.PushToStore("items", "items");
     };
 
     getItems = () => {
@@ -41,4 +41,4 @@ class MainStore extends IDBKeyValStore {
     };
 }
 
-export default new MainStore();
+export default new ExampleStore();

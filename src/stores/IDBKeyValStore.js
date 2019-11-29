@@ -3,7 +3,7 @@ import * as IDBKeyVal from "idb-keyval";
 
 export default class IDBKeyValStore {
     constructor(name) {
-        this._store = new IDBKeyVal.Store("listless-db", name);
+        this._store = new IDBKeyVal.Store("example-db", name);
     }
 
     ClearStore = () => {

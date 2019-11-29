@@ -14,11 +14,11 @@ import {
 
 import { Provider } from "mobx-react";
 
-import ListStore from "./stores/ListStore";
+import ExampleStore from "./stores/_ExampleStore";
 
 //? window.store for debugging, remove in prod
 let store = window.store = {
-    ListStore
+    ExampleStore
 };
 
 const Root = (
