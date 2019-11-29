@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { inject, observer } from "mobx-react";
-import { Stage, Layer, Rect, Text } from "react-konva";
+import { Stage, Layer, Rect, Text, Image } from "react-konva";
+import useImage from "use-image";
 
 import DecoratorTest from "./DecoratorTest";
 
@@ -18,6 +19,14 @@ b.on("bob", Math.random())
 
 console.log(a instanceof DecoratorTest);
 console.log(b instanceof DecoratorTest);
+
+// const [ image ] = useImage("./assets/images//pusheen.png");
+
+const LionImage = (props = {}) => {
+    const [ image ] = useImage("./assets/images/pusheen.png");
+
+    return <Image image={image} { ...props } />;
+};
 
 @inject("store")
 @observer
@@ -50,10 +59,17 @@ class App extends Component {
                     <Rect
                         x={20}
                         y={20}
-                        width={ ExampleStore.width }
-                        height={ ExampleStore.height }
+                        // width={ ExampleStore.width }
+                        // height={ ExampleStore.height }
                         fill={ "#000" }
                         onClick={ () => alert("You clicked me!") }
+                    />
+                </Layer>
+                
+                <Layer>
+                    <LionImage
+                        x={ ExampleStore.width }
+                        y={ ExampleStore.height }
                     />
                 </Layer>
             </Stage>
