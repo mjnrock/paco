@@ -25,7 +25,12 @@ class App extends Component {
             <div
                 className="container"
             >
-               
+                <button
+                    onClick={ ExampleStore.doAThing }
+                >Click</button>
+                <span>{ ExampleStore.entity.Cat.Data.Fish }</span>  
+                <span>{ ExampleStore.entity.Cat.Data.Cats }</span>  
+                <span>{ ExampleStore.entity.Cat.Data.Rando }</span>  
             </div>
         );
     }
