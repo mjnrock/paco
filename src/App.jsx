@@ -1,24 +1,23 @@
 import React, { Component } from "react";
 import { inject, observer } from "mobx-react";
+import { Stage, Layer, Rect, Text } from "react-konva";
 
-import Components from "./components/package";
-
-
-import Decorators from "./lib/decorators";
-
-class Test {}
+import DecoratorTest from "./DecoratorTest";
 
 //?  This assignment is the only reliable way to get on the instance and it is preserves "instanceof" usage
-const a = Decorators.Events(Decorators.State(Decorators.UUID(new Test())));
-const b = Decorators.Events(Decorators.State(Decorators.UUID(new Test())));
+const a = new DecoratorTest();
+const b = new DecoratorTest();
+
+console.log(a)
+console.log(b)
 
 a.prop("cat", Math.random())
 b.prop("cat", Math.random())
 a.on("bob", Math.random())
 b.on("bob", Math.random())
 
-console.log(a instanceof Test);
-console.log(b instanceof Test);
+console.log(a instanceof DecoratorTest);
+console.log(b instanceof DecoratorTest);
 
 @inject("store")
 @observer
@@ -34,13 +33,31 @@ class App extends Component {
 
         // list2.AddItem("I am a task", 0);
     }
+    componentDidMount() {
+        setInterval(() => this.props.store.ExampleStore.rand(), 500);
+    }
 
     render() {
         const { OtherStore, ExampleStore } = this.props.store;
 
-        console.log(OtherStore.state);
-        console.log(ExampleStore.state);
-
+        return (
+            // Stage is a div container
+            // Layer is actual canvas element (so you may have several canvases in the stage)
+            // And then we have canvas shapes inside the Layer
+            <Stage width={window.innerWidth} height={window.innerHeight}>
+                <Layer>
+                    <Text text="Try click on rect" />
+                    <Rect
+                        x={20}
+                        y={20}
+                        width={ ExampleStore.width }
+                        height={ ExampleStore.height }
+                        fill={ "#000" }
+                        onClick={ () => alert("You clicked me!") }
+                    />
+                </Layer>
+            </Stage>
+        );
         return (
             <div
                 className="container"

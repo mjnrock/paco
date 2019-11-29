@@ -6,6 +6,9 @@ import SubComponent from "./../modules/paco/entity/SubComponent";
 
 
 class ExampleStore {
+    @observable height = 50;
+    @observable width = 50;
+
     constructor() {
         this.entity = new Entity();
 
@@ -18,16 +21,15 @@ class ExampleStore {
     }
 
     @action
+    rand = () => {
+        this.height = +(Math.random() * 500);
+        this.width = +(Math.random() * 500);
+    }
+
+    @action
     doAThing = () => {
         // this.entity.Cat = new Component();
-        // this.entity.Cat.Data.Rando = Math.random() * 564894;
-
-        // console.log(this);
-        this.prop("cat", Math.random());
-        // this.on("cat", () => console.log(1));
-        console.log(this.UUID, this.state);
-
-        // console.log(this.entity);
+        this.entity.Cat.Data.Rando = Math.random() * 564894;
     };
 }
 

@@ -91,8 +91,14 @@ export function Events(target) {
     });
 }
 
+export function ApplyAll(target) {
+    return Events(State(UUID(target)));
+}
+
 export default {    
     UUID,
     State,
-    Events
+    Events,
+
+    ApplyAll
 }
