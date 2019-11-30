@@ -342,6 +342,7 @@ export default {
     State,
     Behavior,
     Progeny,
+    Group,
 
     ApplyAll
 }
