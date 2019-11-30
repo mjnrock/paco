@@ -3,26 +3,26 @@ import { GenerateUUID } from "./helper";
 export function Provenance(target) {
     return Object.assign(target, {
         UUID: GenerateUUID(),
-        meta: {},
+        _meta: {},
 
         setMeta(meta = {}) {
-            this.meta = meta;
+            this._meta = meta;
 
             return this;
         },
         getMeta() {
-            console.log(this.meta);
+            console.log(this._meta);
 
             return this;
         },
 
         setProp(prop, value) {
-            this.meta[ prop ] = value;
+            this._meta[ prop ] = value;
 
             return this;
         },
         getProp(prop) {
-            return this.meta[ prop ];
+            return this._meta[ prop ];
         },
         prop(prop, value) {
             console.log(this);
@@ -37,35 +37,35 @@ export function Provenance(target) {
 
 export function State(target) {
     return Object.assign(target, {
-        state: {},
-        events: {
+        _state: {},
+        _events: {
             "error": (target, ...args) => args,
             "prop-change": (target, ...args) => args
         },
-        listeners: {},
+        _listeners: {},
 
         setState(state = {}) {
-            this.state = state;
+            this._state = state;
 
             return this;
         },
         getState() {
-            console.log(this.state);
+            console.log(this._state);
 
             return this;
         },
 
         setProp(prop, value) {
-            this.state[ prop ] = value;
+            this._state[ prop ] = value;
 
-            if(Object.keys(this.listeners).length) {
+            if(Object.keys(this._listeners).length) {
                 this.call("prop-change", prop, value);
             }
 
             return this;
         },
         getProp(prop) {
-            return this.state[ prop ];
+            return this._state[ prop ];
         },
         /**
          * Acts as a getter/setter for this.state[ @prop ] = @value
@@ -81,26 +81,26 @@ export function State(target) {
         },
         
         on(event, callback) {
-            this.events[ event ] = callback;
+            this._events[ event ] = callback;
 
             return this;
         },
         off(event) {
-            delete this.events[ event ];
+            delete this._events[ event ];
 
             return this;
         },
 
         call(event, ...args) {
-            let fn = this.events[ event ];
+            let fn = this._events[ event ];
 
             if(typeof fn === "function") {
                 let result = fn(this, ...args),
                     _this = this;
 
                 (async function() {
-                    for(let i in _this.listeners[ event ]) {
-                        let listener = _this.listeners[ event ][ i ];
+                    for(let i in _this._listeners[ event ]) {
+                        let listener = _this._listeners[ event ][ i ];
 
                         if(typeof listener === "function") {
                             listener(result, [ event, _this]);
@@ -127,11 +127,11 @@ export function State(target) {
          * @param {fn} callback 
          */
         listen(event, callback) {
-            if(!Array.isArray(this.listeners[ event ])) {
-                this.listeners[ event ] = [];
+            if(!Array.isArray(this._listeners[ event ])) {
+                this._listeners[ event ] = [];
             }
 
-            this.listeners[ event ].push(callback);
+            this._listeners[ event ].push(callback);
 
             return this;
         },
@@ -176,13 +176,159 @@ export function State(target) {
     });
 }
 
+export function Behavior(target) {
+    return Object.assign(target, {
+        _actions: {},
+
+        getAction() {
+            return this._actions;
+        },
+        setActions(actions = {}) {
+            this._actions = actions;
+
+            return this;
+        },
+
+        learn(name, action) {
+            this._actions[ name ] = action;
+
+            return this;
+        },
+        unlearn(name) {
+            delete this._actions[ name ];
+
+            return this;
+        },
+
+        do(name, ...args) {
+            let action = this._actions[ name ];
+
+            if(typeof action === "function") {
+                return action(...args);
+            }
+
+            throw new Error("Action has no method");
+        }
+    });
+}
+
+export function Progeny(target) {
+    return Object.assign(target, {
+        _children: [],
+        _parent: null,
+
+        birth(child) {
+            this._children.push(child);
+
+            return this;
+        },
+        abort(index) {
+            this._children.splice(index, 1);
+
+            return this;
+        },
+
+        getChild(index) {
+            return this._children[ index ];
+        },
+        setChild(index, child) {
+            this._children[ index ] = child;
+
+            return this;
+        },
+
+        getParent() {
+            return this._parent;
+        },
+        setParent(value) {
+            this._parent = value;
+
+            return this;
+        },
+
+        child(index, child) {
+            if(child === void 0) {
+                return this.getChild(index);
+            }
+            
+            return this.setChild(index, child);
+        },
+        parent(value) {
+            if(value === void 0) {
+                return this.getParent();
+            }
+            
+            return this.setParent(value);
+        }
+    });
+}
+
+export function Group(target) {
+    return Object.assign(target, {
+        _groupArchetype: null,
+        _group: null,
+
+        getGroup() {
+            return this._group;
+        },
+        setGroup(group) {
+            if(this._group instanceof this._groupArchetype) {
+                this._group = group;
+            }
+        },
+
+        getGroupArchetype() {
+            return this._groupArchetype;
+        },
+        setGroupArchetype(groupArchetype) {
+            this._groupArchetype = groupArchetype;
+
+            return this;
+        },
+
+        send(to, msg) {
+            if(this._group instanceof this._groupArchetype) {
+                return this._group.Send(to, msg);
+            }
+
+            return false;
+        },
+        receive(msg) {
+            if(this._group instanceof this._groupArchetype) {
+                let response = this._group.Receive(msg);
+
+                return response;
+            }
+
+            return false;
+        },
+
+        broadcast(msg) {
+            if(this._group instanceof this._groupArchetype) {
+                return this._group.Broadcast(msg);
+            }
+
+            return false;
+        },
+
+        join(group) {
+            return this.setGroup(group);
+        },
+        leave() {
+            this.setGroup(null);
+        }
+    });
+}
+
 export function ApplyAll(target) {
-    return State(Provenance(target));
+    return Progeny(Behavior(Provenance(State(target))));
 }
 
 export default {    
     Provenance,
     State,
+    Behavior,
+    Progeny,
 
     ApplyAll
 }
