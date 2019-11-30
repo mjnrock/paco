@@ -334,7 +334,7 @@ export function Group(target) {
 }
 
 export function ApplyAll(target) {
-    return Progeny(Behavior(Provenance(State(target))));
+    return Group(Progeny(Behavior(Provenance(State(target)))));
 }
 
 export default {    
