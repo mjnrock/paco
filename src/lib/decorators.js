@@ -267,6 +267,19 @@ export function Group(target) {
     return Object.assign(target, {
         _groupArchetype: null,
         _group: null,
+        _groupMap: {
+            "send": null,
+            "receive": null,
+            "broadcast": null
+        },
+
+        groupMap(prop, fn) {
+            if(prop in this._groupMap && typeof fn === "function") {
+                this._groupMap[ prop ] = fn;
+            }
+
+            return this;
+        },
 
         getGroup() {
             return this._group;
@@ -287,15 +300,15 @@ export function Group(target) {
         },
 
         send(to, msg) {
-            if(this._group instanceof this._groupArchetype) {
-                return this._group.Send(to, msg);
+            if(this._group instanceof this._groupArchetype && typeof this._groupMap[ "send" ] === "function") {
+                return this._groupMap[ "send" ](to, msg);
             }
 
             return false;
         },
         receive(msg) {
-            if(this._group instanceof this._groupArchetype) {
-                let response = this._group.Receive(msg);
+            if(this._group instanceof this._groupArchetype && typeof this._groupMap[ "receive" ] === "function") {
+                let response = this._groupMap[ "receive" ](msg);
 
                 return response;
             }
@@ -304,8 +317,8 @@ export function Group(target) {
         },
 
         broadcast(msg) {
-            if(this._group instanceof this._groupArchetype) {
-                return this._group.Broadcast(msg);
+            if(this._group instanceof this._groupArchetype && typeof this._groupMap[ "broadcast" ] === "function") {
+                return this._groupMap[ "broadcast" ](msg);
             }
 
             return false;
