@@ -1,4 +1,5 @@
 import { GenerateUUID } from "./helper";
+import { type } from "os";
 
 export function Provenance(target) {
     return Object.assign(target, {
@@ -81,6 +82,10 @@ export function State(target) {
         },
         
         on(event, callback) {
+            if(typeof callback !== "function") {
+                callback = (...args) => [ ...args ];
+            }
+            
             this._events[ event ] = callback;
 
             return this;
@@ -333,6 +338,40 @@ export function Group(target) {
     });
 }
 
+export function Merge(subject, addon, doMerge = false) {
+    if(doMerge) {
+        subject = Object.assign(subject, addon);
+
+        return subject;
+    }
+
+    return Object.assign(subject, addon);
+}
+export function Apply(subject, decorators = [], doMerge = false) {
+    if(doMerge) {
+        for(let i in decorators) {
+            let dec = decorators[ i ];
+
+            if(typeof dec === "function") {
+                subject = [ dec ](subject);
+            }
+        }
+
+        return subject;
+    }
+
+    let target = subject;
+    for(let i in decorators) {
+        let dec = decorators[ i ];
+
+        if(typeof dec === "function") {
+            target = [ dec ](target);
+        }
+    }
+
+    return target;
+}
+
 export function ApplyAll(target) {
     return Group(Progeny(Behavior(Provenance(State(target)))));
 }
@@ -344,5 +383,7 @@ export default {
     Progeny,
     Group,
 
+    Merge,
+    Apply,
     ApplyAll
 }
