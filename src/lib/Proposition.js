@@ -2,7 +2,7 @@ import Attribute from "./Attribute";
 import Condition from "./Condition";
 
 export default class Proposition {
-    constructor(conditions, onTrue, onFalse, addChangeListeners = false) {
+    constructor(conditions, onTrue, onFalse) {
         this.conditions = conditions;
         this.result = false;
 

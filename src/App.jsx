@@ -46,8 +46,7 @@ let a = new Lib.NumberAttribute(1, 0, 10),
             c, c2, c3
         ],
         () => console.log("YES"),
-        () => console.log("NO"),
-        true
+        () => console.log("NO")
     );
 
 a.Value(15);
