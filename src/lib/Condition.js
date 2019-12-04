@@ -56,10 +56,12 @@ export default class Condition {
      * @param {bool} addChangeListener Invoke this.Run() on this.attribute:prop-change event
      */
     Assign(attribute, addChangeListener = false) {
-        this.attribute = attribute;
+        if(attribute instanceof Attribute) {
+            this.attribute = attribute;
 
-        if(addChangeListener) {
-            this.attribute.listen("prop-change", ([ t, n, o ]) => this.Run(this.attribute));
+            if(addChangeListener) {
+                this.attribute.listen("prop-change", ([ t, n, o ]) => this.Run(this.attribute));
+            }
         }
 
         return this;
