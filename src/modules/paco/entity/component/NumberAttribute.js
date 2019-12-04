@@ -95,15 +95,13 @@ export default class NumberAttribute extends Attribute {
         }
 
         this.prop("value", value);
-        
+
         return this.change(value, this.prop("value"));
     }
 
     change(newValue, oldValue) {
         let min = this.Min(),
             max = this.Max();
-
-        console.log(min, max);
 
         if((min !== null && min !== void 0) && newValue <= min) {
             newValue = min;
