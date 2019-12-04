@@ -4,8 +4,18 @@ import { GenerateUUID } from "./helper";
 //? e.g.  export default class Attribute extends ClassDecorators.Events(ClassDecorators.State(ClassDecorators.DecoratorBase)) {}
 class DecoratorBase {
     constructor() {
-        this._id;
+        this._id;   // A generic id for any purpose
         this._uuid = GenerateUUID();
+    }
+
+    ID(id = null) {
+        if(id !== null && id !== void 0) {
+            this._id = id;
+
+            return this;
+        }
+
+        return this._id;
     }
 
     UUID(uuid = null) {
