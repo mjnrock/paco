@@ -33,14 +33,34 @@ let a = new Lib.NumberAttribute(1, 0, 10),
     c = new Lib.Condition(
         Lib.Condition.EnumType.IN,
         1, 5, 3
+    ).Assign(a),
+    c2 = new Lib.Condition(
+        Lib.Condition.EnumType.EQUALS,
+        1
+    ).Assign(a),
+    c3 = new Lib.Condition(
+        Lib.Condition.EnumType.GTE,
+        5
+    ).Assign(a),
+    p = new Lib.Proposition([
+            c, c2, c3
+        ],
+        () => console.log("YES"),
+        () => console.log("NO")
     );
+
+console.log(p.Run(a, {
+    useDysjunction: false,
+    negateResult: true
+}));
+console.log(p.Run(a));
 
 // c.Assign(a);
 // c.Unassign();1
-console.log(c.Run(a));
+// console.log(c.Run());
 
-a.Value(2);
-console.log(c.Run(a));
+// a.Value(2);
+// console.log(c.Run());
 
 
 @inject("store")

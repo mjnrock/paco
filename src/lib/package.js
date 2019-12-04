@@ -7,6 +7,7 @@ import TextAttribute from "./TextAttribute";
 import NumberAttribute from "./NumberAttribute";
 
 import Condition from "./Condition";
+import Proposition from "./Proposition";
 
 export default {
     Decorators,
@@ -16,5 +17,6 @@ export default {
     TextAttribute,
     NumberAttribute,
 
-    Condition
-}
+    Condition,
+    Proposition
+};

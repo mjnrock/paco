@@ -19,12 +19,21 @@ export default class Condition {
     };
 
     constructor(type, ...args) {
+        //  Use Condition.EnumTypes.[ ... ] as @type argument
         this.type = type;
+        //  Variable amount of arguments, specified by Condition.EnumTypes.[ ... ][ 1 ]
         this.args = args;
+
+        //  The result of the last .Run() or the initial condition
         this.result = false;
+        //  Optionally use .Assign() to store an <Attribute> association locally
         this.attribute = null;
 
         return this;
+    }
+
+    IsAssigned() {
+        return this.attribute instanceof Attribute;
     }
 
     Assign(attribute) {
