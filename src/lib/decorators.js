@@ -1,3 +1,8 @@
+//! ------------------------------------------------------------------------------------------------------------------
+//! The ClassDecorators version is new and largely untested, and previous attempts had several failures points.
+//! THOROUGHLY test them before abandoning this version
+//! ------------------------------------------------------------------------------------------------------------------
+
 import { GenerateUUID } from "./helper";
 
 export function Provenance(target = {}) {
