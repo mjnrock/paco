@@ -51,9 +51,9 @@ export default class Proposition {
         };
 
         if(result && typeof this.callbacks.ontrue === "function") {
-            this.callbacks.ontrue(resultObj);
+            (async () => this.callbacks.ontrue(resultObj))();
         } else if(!result && typeof this.callbacks.onfalse === "function") {
-            this.callbacks.onfalse(resultObj);
+            (async () => this.callbacks.onfalse(resultObj))();
         }
 
         return resultObj;
