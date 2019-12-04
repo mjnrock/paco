@@ -24,16 +24,16 @@ export default class Attribute {
     }
 
     add(value) {
-        this.value(this.prop("value") + value);
+        return this.value(this.prop("value") + value);
     }
     subtract(value) {
-        this.value(this.prop("value") - value);
+        return this.value(this.prop("value") - value);
     }
     multiply(value) {
-        this.value(this.prop("value") * value);
+        return this.value(this.prop("value") * value);
     }
     divide(value) {
-        this.value(this.prop("value") / value);
+        return this.value(this.prop("value") / value);
     }
 
     toPercent() {
