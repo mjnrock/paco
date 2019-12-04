@@ -4,6 +4,7 @@ import { inject, observer } from "mobx-react";
 // import useImage from "use-image";
 
 import Attribute from "./modules/paco/entity/component/Attribute";
+import TextAttribute from "./modules/paco/entity/component/TextAttribute";
 // const [ image ] = useImage("./assets/images//pusheen.png");
 
 // const LionImage = (props = {}) => {
@@ -12,23 +13,35 @@ import Attribute from "./modules/paco/entity/component/Attribute";
 //     return <Image image={image} { ...props } />;
 // };
 
-let a = new Attribute();
-a.listen("attribute:change", ([ t, n, o ]) => console.log(n > o ? "INC" : "DEC"));
-a.listen("attribute:min", ([ t, n, o ]) => console.log("MIN", n, o));
-a.listen("attribute:max", ([ t, n, o ]) => console.log("MAX", n, o));
-a.listen("attribute:zero", ([ t, n, o ]) => console.log("ZERO", n, o));
+let a = new TextAttribute("Cats", "Bob");
 
-a.setMin(-1);
-a.setMax(10);
+a.listen("prop-change", ([ t, n, o ]) => console.log(t, n, o));
 
-a.dec(3);
-a.inc(500);
-a.value(0);
-a.value(10);
-a.value(-1);
+a.Name("Casdfsdf");
+a.Value(123);
+a.Value(456);
+a.Value(789);
 
-console.log(a);
-console.log(a.value());
+// console.log(a._state);
+// a.Current("Fish");
+// a.Current("Cheese");
+// a.Current("Dog");
+
+// a.listen("attribute:min", ([ t, n, o ]) => console.log("MIN", n, o));
+// a.listen("attribute:max", ([ t, n, o ]) => console.log("MAX", n, o));
+// a.listen("attribute:zero", ([ t, n, o ]) => console.log("ZERO", n, o));
+
+// a.setMin(-1);
+// a.setMax(10);
+
+// a.dec(3);
+// a.inc(500);
+// a.value(0);
+// a.value(10);
+// a.value(-1);
+
+// console.log(a);
+// console.log(a.value());
 
 @inject("store")
 @observer

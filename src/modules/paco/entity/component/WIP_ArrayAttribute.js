@@ -1,26 +1,24 @@
+//!ANCHOR This needs to be converted from implicit number attribute to proper ArrayAttribute
+
 import Attribute from "./Attribute";
 import Decorators from "../../../../lib/decorators";
 
 export default class ArrayAttribute extends Attribute {
-    constructor(values = [], mins = [], maxs = []) {
+    constructor(values = [], min = null, max = null) {
+        super(values);
+        
         let _this = Decorators.State({});
 
-        _this.prop("value", values);
-        _this.prop("min", mins);
-        _this.prop("max", maxs);
-
-        _this.on("attribute:change");
-        _this.on("attribute:zero");
-        _this.on("attribute:min");
-        _this.on("attribute:max");
+        _this.prop("min", min);
+        _this.prop("max", max);
 
         return Decorators.Merge(this, _this);
     }
 
-    init(values = [], mins = [], maxs = []) {
+    init(values = [], min = null, max = null) {
         this.prop("value", values);
-        this.setMin(mins);
-        this.setMax(maxs);
+        this.setMin(min);
+        this.setMax(max);
         
         return this;
     }
@@ -94,23 +92,23 @@ export default class ArrayAttribute extends Attribute {
         return this.value(index, this.prop("value")[ index ] / value);
     }
 
-    toPercent() {
-        return this.toRate() * 100;
-    }
-    toRate() {
-        let value = this.prop("value"),
-            min = this.prop("min"),
-            max = this.prop("max");
+    // toPercent() {
+    //     return this.toRate() * 100;
+    // }
+    // toRate() {
+    //     let value = this.prop("value"),
+    //         min = this.prop("min"),
+    //         max = this.prop("max");
 
-        return (value - min) / (max - min);
-    }
+    //     return (value - min) / (max - min);
+    // }
     
-    isEmpty() {
-        return this.prop("value") === this.prop("min");
-    }
-    isFull() {
-        return this.prop("value") === this.prop("max");
-    }
+    // isEmpty() {
+    //     return this.prop("value") === this.prop("min");
+    // }
+    // isFull() {
+    //     return this.prop("value") === this.prop("max");
+    // }
 
     value(index, value) {
             if(arguments.length === 1) {
@@ -140,12 +138,12 @@ export default class ArrayAttribute extends Attribute {
         let min = this.prop("min"),
             max = this.prop("max");
 
-        if((min[ index ] !== null && min[ index ] !== void 0) && newValue <= min[ index ]) {
+        if((min !== null && min !== void 0) && newValue <= min) {
             newValue = min;
 
             this.call("attribute:min", index, newValue, oldValue);
         }
-        if((max[ index ] !== null && max[ index ] !== void 0) && newValue >= max[ index ]) {
+        if((max !== null && max !== void 0) && newValue >= max) {
             newValue = max;
             
             this.call("attribute:max", index, newValue, oldValue);

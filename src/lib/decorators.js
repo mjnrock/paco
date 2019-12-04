@@ -51,16 +51,16 @@ export function State(target) {
             return this;
         },
         getState() {
-            console.log(this._state);
-
             return this;
         },
 
         setProp(prop, value) {
+            let oldValue = this._state[ prop ];
+
             this._state[ prop ] = value;
 
             if(Object.keys(this._listeners).length) {
-                this.call("prop-change", prop, value);
+                this.call("prop-change", prop, value, oldValue);
             }
 
             return this;
