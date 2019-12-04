@@ -33,7 +33,7 @@ let a = new Lib.NumberAttribute(1, 0, 10),
     c = new Lib.Condition(
         Lib.Condition.EnumType.IN,
         1, 5, 3
-    ).Assign(a),
+    ).Assign(a, true),
     c2 = new Lib.Condition(
         Lib.Condition.EnumType.EQUALS,
         1
@@ -46,17 +46,21 @@ let a = new Lib.NumberAttribute(1, 0, 10),
             c, c2, c3
         ],
         () => console.log("YES"),
-        () => console.log("NO")
+        () => console.log("NO"),
+        true
     );
+
+a.Value(15);
+a.Value(5);
 
 // console.log(p.Run(a, {
 //     useDysjunction: false,
 //     negateResult: true
 // }));
-console.log(p.RunAnd(a));
-console.log(p.RunOr(a));
-console.log(p.RunNotAnd(a));
-console.log(p.RunNotOr(a));
+// console.log(p.RunAnd(a));
+// console.log(p.RunOr(a));
+// console.log(p.RunNotAnd(a));
+// console.log(p.RunNotOr(a));
 
 // c.Assign(a);
 // c.Unassign();1

@@ -29,6 +29,21 @@ export default class Condition {
         //  Optionally use .Assign() to store an <Attribute> association locally
         this.attribute = null;
 
+        this.callbacks = {
+            onrun: null
+        };
+
+        return this;
+    }
+
+    AttachRunListener(callback) {
+        this.callbacks.onrun = callback;
+
+        return this;
+    }
+    DetachRunListener() {
+        this.callbacks.onrun = null;
+
         return this;
     }
 
@@ -36,8 +51,16 @@ export default class Condition {
         return this.attribute instanceof Attribute;
     }
 
-    Assign(attribute) {
+    /**
+     * @param {Attribute} attribute Assign a local variable to an <Attribute>
+     * @param {bool} addChangeListener Invoke this.Run() on this.attribute:prop-change event
+     */
+    Assign(attribute, addChangeListener = false) {
         this.attribute = attribute;
+
+        if(addChangeListener) {
+            this.attribute.listen("prop-change", ([ t, n, o ]) => this.Run(this.attribute));
+        }
 
         return this;
     }
@@ -62,6 +85,10 @@ export default class Condition {
                     this.result = fn(this.attribute);
                 } else {
                     this.result = fn(attribute);
+                }
+
+                if(typeof this.callbacks.onrun === "function") {
+                    (async () => this.callbacks.onrun(this.result))();
                 }
 
                 return this.result;
