@@ -49,8 +49,13 @@ let a = new Lib.NumberAttribute(1, 0, 10),
         () => console.log("NO")
     );
 
+console.log(a);
+
 a.Value(15);
 a.Value(5);
+
+p.listen("onrun", () => console.log(3745434545434));
+p.Run(a);
 
 // console.log(p.Run(a, {
 //     useDysjunction: false,

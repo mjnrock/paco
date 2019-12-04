@@ -35,51 +35,18 @@ export function Provenance(target) {
     });
 };
 
-export function State(target) {
+export function Events(target) {
     return Object.assign(target, {
-        _state: {},
         _events: {
             "error": (target, ...args) => args,
             "prop-change": (target, ...args) => args
         },
         _listeners: {},
 
-        setState(state = {}) {
-            this._state = state;
-
-            return this;
-        },
-        getState() {
-            return this;
+        hasEvent(name) {
+            return typeof this._events[ name ] === "function";
         },
 
-        setProp(prop, value) {
-            let oldValue = this._state[ prop ];
-
-            this._state[ prop ] = value;
-
-            if(Object.keys(this._listeners).length) {
-                this.call("prop-change", prop, value, oldValue);
-            }
-
-            return this;
-        },
-        getProp(prop) {
-            return this._state[ prop ];
-        },
-        /**
-         * Acts as a getter/setter for this.state[ @prop ] = @value
-         * @param {string} prop 
-         * @param {any} ?value
-         */
-        prop(prop, value) {
-            if(value === void 0) {
-                return this.getProp(prop);
-            }
-            
-            return this.setProp(prop, value);
-        },
-        
         on(event, callback) {
             if(typeof callback !== "function") {
                 callback = (...args) => [ ...args ];
@@ -178,6 +145,48 @@ export function State(target) {
             throw new Error("This method has not been setup yet.  Implement a search system, maybe use UUIDs?");
         }
     });
+}
+
+export function State(target) {
+    return Object.assign(target, Events({
+        _state: {},
+        
+        setState(state = {}) {
+            this._state = state;
+
+            return this;
+        },
+        getState() {
+            return this;
+        },
+
+        setProp(prop, value) {
+            let oldValue = this._state[ prop ];
+
+            this._state[ prop ] = value;
+
+            if(Object.keys(this._listeners).length) {
+                this.call("prop-change", prop, value, oldValue);
+            }
+
+            return this;
+        },
+        getProp(prop) {
+            return this._state[ prop ];
+        },
+        /**
+         * Acts as a getter/setter for this.state[ @prop ] = @value
+         * @param {string} prop 
+         * @param {any} ?value
+         */
+        prop(prop, value) {
+            if(value === void 0) {
+                return this.getProp(prop);
+            }
+            
+            return this.setProp(prop, value);
+        }
+    }));
 }
 
 export function Behavior(target) {
@@ -383,6 +392,7 @@ export function ApplyAll(target = {}) {
 
 export default {    
     Provenance,
+    Events,
     State,
     Behavior,
     Progeny,

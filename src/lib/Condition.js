@@ -1,3 +1,5 @@
+import Decorators from "./decorators";
+
 import Attribute from "./Attribute";
 
 export default class Condition {
@@ -19,6 +21,10 @@ export default class Condition {
     };
 
     constructor(type, ...args) {
+        let _this = Decorators.Apply([
+            Decorators.Events
+        ]);
+
         //  Use Condition.EnumTypes.[ ... ] as @type argument
         this.type = type;
         //  Variable amount of arguments, specified by Condition.EnumTypes.[ ... ][ 1 ]
@@ -29,22 +35,9 @@ export default class Condition {
         //  Optionally use .Assign() to store an <Attribute> association locally
         this.attribute = null;
 
-        this.callbacks = {
-            onrun: null
-        };
+        _this.on("onrun");
 
-        return this;
-    }
-
-    AttachRunListener(callback) {
-        this.callbacks.onrun = callback;
-
-        return this;
-    }
-    DetachRunListener() {
-        this.callbacks.onrun = null;
-
-        return this;
+        return Decorators.Merge(this, _this);
     }
 
     IsAssigned() {
@@ -89,8 +82,8 @@ export default class Condition {
                     this.result = fn(attribute);
                 }
 
-                if(typeof this.callbacks.onrun === "function") {
-                    (async () => this.callbacks.onrun(this.result))();
+                if(typeof this.hasEvent("onrun")) {
+                    (async () => this.call("onrun", this.result))();
                 }
 
                 return this.result;

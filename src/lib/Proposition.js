@@ -1,15 +1,22 @@
+import Decorators from "./decorators";
+
 import Attribute from "./Attribute";
 import Condition from "./Condition";
 
 export default class Proposition {
-    constructor(conditions, onTrue, onFalse) {
+    constructor(conditions, onTrue = null, onFalse = null, onRun = null) {
+        let _this = Decorators.Apply([
+            Decorators.Events
+        ]);
+
         this.conditions = conditions;
         this.result = false;
 
-        this.callbacks = {
-            ontrue: onTrue,
-            onfalse: onFalse,
-        };
+        _this.on("ontrue", onTrue);
+        _this.on("onfalse", onFalse);
+        _this.on("onrun", onRun);
+
+        return Decorators.Merge(this, _this);
     }
 
     Run(attribute, { useDysjunction = true, negateResult = false, overrideAssignments = false } = {}) {
@@ -51,10 +58,14 @@ export default class Proposition {
             }
         };
 
-        if(result && typeof this.callbacks.ontrue === "function") {
-            (async () => this.callbacks.ontrue(resultObj))();
-        } else if(!result && typeof this.callbacks.onfalse === "function") {
-            (async () => this.callbacks.onfalse(resultObj))();
+        if(this.hasEvent("onrun")) {
+            this.call("onrun", resultObj);
+        }
+
+        if(result && this.hasEvent("ontrue")) {
+            this.call("ontrue", resultObj);
+        } else if(!result && this.hasEvent("onfalse")) {
+            this.call("onfalse", resultObj);
         }
 
         return resultObj;
