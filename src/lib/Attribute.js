@@ -1,6 +1,6 @@
 import ClassDecorators from "./classDecorators";
 
-export default class Attribute extends ClassDecorators.Events(ClassDecorators.State(ClassDecorators.DecoratorBase)) {
+export default class Attribute extends ClassDecorators.StateEvents {
     constructor(value) {
         super();
         

@@ -2,7 +2,30 @@ import { GenerateUUID } from "./helper";
 
 //? This is the important base function for inheritence
 //? e.g.  export default class Attribute extends ClassDecorators.Events(ClassDecorators.State(ClassDecorators.DecoratorBase)) {}
-class DecoratorBase {};
+class DecoratorBase {
+    constructor() {
+        this._id;
+        this._uuid = GenerateUUID();
+    }
+
+    UUID(uuid = null) {
+        if(uuid === true) {
+            this._uuid = GenerateUUID();
+        } else if(uuid !== null) {
+            let regex = new RegExp(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/, "i");
+
+            if(regex.test(uuid)) {
+                this._uuid = uuid;
+            } else {
+                throw new Error("[Invalid UUID]: @uuid is did not pass a UUID RegEx check.  Invoke 'this.UUID(true)' to auto-generate.");
+            }
+        } else {
+            return this._uuid;
+        }
+
+        return this;
+    }
+};
 
 const Events = (Events) => class extends Events {
     constructor() {
@@ -163,11 +186,10 @@ const State = (State) => class extends State {
     }
 };
 
-const Provenance = (Provenance) => class extends Provenance {
+const Meta = (Meta) => class extends Meta {
     constructor() {
         super();
 
-        this.UUID = GenerateUUID();
         this._meta = {};
     }
 
@@ -352,12 +374,28 @@ const Group = (Group) => class extends Group {
     }
 };
 
+//* This is to allow for "class instanceof StateEvents" and as a convenience super class
+class StateEvents extends Events(State(DecoratorBase)) {
+    constructor() {
+        super();
+    }
+};
+//* This is to allow for "class instanceof MetaStateEvents" and as a convenience super class
+class MetaStateEvents extends Meta(Events(State(DecoratorBase))) {
+    constructor() {
+        super();
+    }
+};
+
 export default {    
     DecoratorBase,
-    Provenance,
     Events,
     State,
+    Meta,
     Behavior,
     Progeny,
-    Group
+    Group,
+
+    StateEvents,
+    MetaStateEvents,
 }

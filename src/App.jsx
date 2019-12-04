@@ -50,10 +50,15 @@ let a = new Lib.NumberAttribute(1, 0, 10),
         () => console.log("YES"),
         () => console.log("NO")
     );
+    
 
 console.log(a);
 console.log(a2);
 console.log(a3);
+
+console.log(a3.UUID());
+
+
 
 a.Value(15);
 a.Value(5);
