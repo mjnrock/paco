@@ -1,5 +1,4 @@
 import Attribute from "./Attribute";
-import Decorators from "../../../../lib/decorators";
 
 export default class NumberAttribute extends Attribute {
     constructor(value = 0, min = null, max = null) {
@@ -8,9 +7,9 @@ export default class NumberAttribute extends Attribute {
         this.prop("min", min);
         this.prop("max", max);
 
-        this.on("attribute:zero");
-        this.on("attribute:min");
-        this.on("attribute:max");
+        this.on("prop-change:value:zero");
+        this.on("prop-change:value:min");
+        this.on("prop-change:value:max");
 
         return this;
     }
@@ -106,15 +105,15 @@ export default class NumberAttribute extends Attribute {
         if((min !== null && min !== void 0) && newValue <= min) {
             newValue = min;
 
-            this.call("attribute:min", newValue, oldValue);
+            this.call("prop-change:value:min", newValue, oldValue);
         }
         if((max !== null && max !== void 0) && newValue >= max) {
             newValue = max;
             
-            this.call("attribute:max", newValue, oldValue);
+            this.call("prop-change:value:max", newValue, oldValue);
         }
         if(newValue === 0) {
-            this.call("attribute:zero", newValue, oldValue);
+            this.call("prop-change:value:zero", newValue, oldValue);
         }
 
         return this;

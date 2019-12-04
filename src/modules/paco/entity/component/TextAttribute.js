@@ -1,5 +1,4 @@
 import Attribute from "./Attribute";
-import Decorators from "../../../../lib/decorators";
 
 export default class TextAttribute extends Attribute {
     constructor(value, name = null) {

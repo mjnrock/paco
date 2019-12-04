@@ -17,9 +17,9 @@ import TextAttribute from "./modules/paco/entity/component/TextAttribute";
 let a = new NumberAttribute(1, 0, 10);
 
 a.listen("prop-change", ([ t, n, o ]) => console.log(t, n, o));
-a.listen("attribute:min", ([ t, n, o ]) => console.log("MIN", n, o));
-a.listen("attribute:max", ([ t, n, o ]) => console.log("MAX", n, o));
-a.listen("attribute:zero", ([ t, n, o ]) => console.log("ZERO", n, o));
+a.listen("prop-change:value:min", ([ t, n, o ]) => console.log("MIN", n, o));
+a.listen("prop-change:value:max", ([ t, n, o ]) => console.log("MAX", n, o));
+a.listen("prop-change:value:zero", ([ t, n, o ]) => console.log("ZERO", n, o));
 
 a.Min(-1);
 a.Max(10);
