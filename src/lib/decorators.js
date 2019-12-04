@@ -1,5 +1,4 @@
 import { GenerateUUID } from "./helper";
-import { type } from "os";
 
 export function Provenance(target) {
     return Object.assign(target, {
@@ -347,13 +346,13 @@ export function Merge(subject, addon, doMerge = false) {
 
     return Object.assign(subject, addon);
 }
-export function Apply(subject, decorators = [], doMerge = false) {
+export function Apply(decorators = [], subject = {}, doMerge = false) {
     if(doMerge) {
         for(let i in decorators) {
             let dec = decorators[ i ];
 
             if(typeof dec === "function") {
-                subject = [ dec ](subject);
+                subject = dec(subject);
             }
         }
 
@@ -365,15 +364,21 @@ export function Apply(subject, decorators = [], doMerge = false) {
         let dec = decorators[ i ];
 
         if(typeof dec === "function") {
-            target = [ dec ](target);
+            target = dec(target);
         }
     }
 
     return target;
 }
 
-export function ApplyAll(target) {
-    return Group(Progeny(Behavior(Provenance(State(target)))));
+export function ApplyAll(target = {}) {
+    return Apply([
+        Group,
+        Progeny,
+        Behavior,
+        Provenance,
+        State,
+    ], target);
 }
 
 export default {    

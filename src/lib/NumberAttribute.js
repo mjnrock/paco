@@ -88,6 +88,7 @@ export default class NumberAttribute extends Attribute {
         return this.change(newValue, oldValue);
     }
 
+    // eslint-disable-next-line
     Value(value) {
         if(value === null || value === void 0) {
             return this.prop("value");

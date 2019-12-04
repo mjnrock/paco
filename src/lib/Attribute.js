@@ -2,7 +2,9 @@ import Decorators from "./decorators";
 
 export default class Attribute {
     constructor(value) {
-        let _this = Decorators.State({});
+        let _this = Decorators.Apply([
+            Decorators.State
+        ]);
 
         _this.prop("value", value);
 
