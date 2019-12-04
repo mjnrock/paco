@@ -52,6 +52,7 @@ export default class Condition {
             throw new Error("[Incorrect Condition Setup]: Both @attribute and @this.attribute are either `null` or `undefined`");
         }
 
+        // eslint-disable-next-line
         let [ name, len, types ] = this.type,
             fn = this[ name ].bind(this);
 
