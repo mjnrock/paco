@@ -1,14 +1,19 @@
-import Decorators from "./decorators";
+import ClassDecorators from "./classDecorators";
 
-export default class Attribute {
+export default class Attribute extends ClassDecorators.Events(ClassDecorators.State(ClassDecorators.DecoratorBase)) {
     constructor(value) {
-        let _this = Decorators.Apply([
-            Decorators.State
-        ]);
+        // let _this = Decorators.Apply([
+        //     Decorators.State
+        // ]);
 
-        _this.prop("value", value);
+        // _this.prop("value", value);
 
-        return Decorators.Merge(this, _this);
+        // return Decorators.Merge(this, _this);
+
+        super();
+        this.prop("value", value);
+
+        return this;
     }
 
     Value(value) {

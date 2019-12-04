@@ -10,8 +10,6 @@ export default class NumberAttribute extends Attribute {
         this.on("prop-change::zero");
         this.on("prop-change::min");
         this.on("prop-change::max");
-
-        return this;
     }
 
     init(value = 0, min = null, max = null) {

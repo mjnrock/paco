@@ -1,6 +1,6 @@
 import { GenerateUUID } from "./helper";
 
-export function Provenance(target) {
+export function Provenance(target = {}) {
     return Object.assign(target, {
         UUID: GenerateUUID(),
         _meta: {},
@@ -11,31 +11,19 @@ export function Provenance(target) {
             return this;
         },
         getMeta() {
-            console.log(this._meta);
-
-            return this;
+            return this._meta;
         },
-
-        setProp(prop, value) {
-            this._meta[ prop ] = value;
-
-            return this;
-        },
-        getProp(prop) {
-            return this._meta[ prop ];
-        },
-        prop(prop, value) {
-            console.log(this);
+        meta(prop, value) {
             if(value === void 0) {
-                return this.getProp(prop);
+                return this.getMeta(prop);
             }
             
-            return this.setProp(prop, value);
+            return this.setMeta(prop, value);
         }
     });
 };
 
-export function Events(target) {
+export function Events(target = {}) {
     return Object.assign(target, {
         _events: {
             "error": (target, ...args) => args,
@@ -147,7 +135,7 @@ export function Events(target) {
     });
 }
 
-export function State(target) {
+export function State(target = {}) {
     return Object.assign(target, Events({
         _state: {},
         
@@ -189,7 +177,7 @@ export function State(target) {
     }));
 }
 
-export function Behavior(target) {
+export function Behavior(target = {}) {
     return Object.assign(target, {
         _actions: {},
 
@@ -225,7 +213,7 @@ export function Behavior(target) {
     });
 }
 
-export function Progeny(target) {
+export function Progeny(target = {}) {
     return Object.assign(target, {
         _children: [],
         _parent: null,
@@ -276,7 +264,7 @@ export function Progeny(target) {
     });
 }
 
-export function Group(target) {
+export function Group(target = {}) {
     return Object.assign(target, {
         _groupArchetype: null,
         _group: null,

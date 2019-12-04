@@ -22,18 +22,17 @@ export default class Condition {
 
     constructor(type, ...args) {
         let _this = Decorators.Apply([
-            Decorators.Events
+            Decorators.State
         ]);
-
+        
         //  Use Condition.EnumTypes.[ ... ] as @type argument
-        this.type = type;
+        _this.prop("type", type);
         //  Variable amount of arguments, specified by Condition.EnumTypes.[ ... ][ 1 ]
-        this.args = args;
-
+        _this.prop("args", args);
         //  The result of the last .Run() or the initial condition
-        this.result = false;
+        _this.prop("result", false);
         //  Optionally use .Assign() to store an <Attribute> association locally
-        this.attribute = null;
+        _this.prop("attribute", null);
 
         _this.on("onrun");
 
@@ -41,61 +40,61 @@ export default class Condition {
     }
 
     IsAssigned() {
-        return this.attribute instanceof Attribute;
+        return this.prop("attribute") instanceof Attribute;
     }
 
     /**
      * @param {Attribute} attribute Assign a local variable to an <Attribute>
-     * @param {bool} addChangeListener Invoke this.Run() on this.attribute:prop-change event
+     * @param {bool} addChangeListener Invoke this.Run() on this.prop("attribute"):prop-change event
      */
     Assign(attribute, addChangeListener = false) {
         if(attribute instanceof Attribute) {
-            this.attribute = attribute;
+            this.prop("attribute", attribute);
 
             if(addChangeListener) {
-                this.attribute.listen("prop-change", ([ t, n, o ]) => this.Run(this.attribute));
+                this.prop("attribute").listen("prop-change", ([ t, n, o ]) => this.Run(this.prop("attribute")));
             }
         }
 
         return this;
     }
     Unassign() {
-        this.attribute = null;
+        this.prop("attribute", null);
 
         return this;
     }
 
     Run(attribute) {
-        if((attribute === void 0 || attribute === null) && (this.attribute === null || this.attribute === void 0)) {
-            throw new Error("[Incorrect Condition Setup]: Both @attribute and @this.attribute are either `null` or `undefined`");
+        if((attribute === void 0 || attribute === null) && (this.prop("attribute") === null || this.prop("attribute") === void 0)) {
+            throw new Error(`[Incorrect Condition Setup]: Both @attribute and @this.prop("attribute") are either 'null' or 'undefined'`);
         }
 
         // eslint-disable-next-line
-        let [ name, len, types ] = this.type,
+        let [ name, len, types ] = this.prop("type"),
             fn = this[ name ].bind(this);
 
         if(typeof fn === "function") {
-            if(len === null || (this.args.length === len)) {
-                if(this.attribute instanceof Attribute) {
-                    this.result = fn(this.attribute);
+            if(len === null || (this.prop("args").length === len)) {
+                if(this.prop("attribute") instanceof Attribute) {
+                    this.prop("result", fn(this.prop("attribute")));
                 } else {
-                    this.result = fn(attribute);
+                    this.prop("result", fn(attribute));
                 }
 
                 if(typeof this.hasEvent("onrun")) {
-                    (async () => this.call("onrun", this.result))();
+                    (async () => this.call("onrun", this.prop("result")))();
                 }
 
-                return this.result;
+                return this.prop("result");
             }
         }
 
-        throw new Error("[Incorrect Condition Setup]: Please use <Condition.EnumTypes.[ ... ]> as the @type argument.");
+        throw new Error(`[Incorrect Condition Setup]: Please use <Condition.EnumTypes.[ ... ]> as the @type argument.`);
     }
 
     Equals(attribute) {
         if(attribute instanceof Attribute) {
-            let [ var1 ] = this.args,
+            let [ var1 ] = this.prop("args"),
                 value = attribute.Value();
 
             if(typeof value === "string" || value instanceof String) {
@@ -115,7 +114,7 @@ export default class Condition {
 
     Between(attribute) {
         if(attribute instanceof Attribute) {
-            let [ var1, var2 ] = this.args,
+            let [ var1, var2 ] = this.prop("args"),
                 value = attribute.Value();
 
             if(typeof value === "number") {
@@ -130,8 +129,8 @@ export default class Condition {
         if(attribute instanceof Attribute) {
             let value = attribute.Value();
 
-            if(Array.isArray(this.args)) {
-                return this.args.includes(value);
+            if(Array.isArray(this.prop("args"))) {
+                return this.prop("args").includes(value);
             }
         }
 
@@ -143,7 +142,7 @@ export default class Condition {
 
     GT(attribute) {
         if(attribute instanceof Attribute) {
-            let [ var1 ] = this.args,
+            let [ var1 ] = this.prop("args"),
                 value = attribute.Value();
 
             if(typeof value === "number") {
@@ -155,7 +154,7 @@ export default class Condition {
     }
     GTE(attribute) {
         if(attribute instanceof Attribute) {
-            let [ var1 ] = this.args,
+            let [ var1 ] = this.prop("args"),
                 value = attribute.Value();
 
             if(typeof value === "number") {
@@ -168,7 +167,7 @@ export default class Condition {
 
     LT(attribute) {
         if(attribute instanceof Attribute) {
-            let [ var1 ] = this.args,
+            let [ var1 ] = this.prop("args"),
                 value = attribute.Value();
 
             if(typeof value === "number") {
@@ -180,7 +179,7 @@ export default class Condition {
     }
     LTE(attribute) {
         if(attribute instanceof Attribute) {
-            let [ var1 ] = this.args,
+            let [ var1 ] = this.prop("args"),
                 value = attribute.Value();
 
             if(typeof value === "number") {
@@ -193,7 +192,7 @@ export default class Condition {
 
     Contains(attribute) {
         if(attribute instanceof Attribute) {
-            let [ var1 ] = this.args,
+            let [ var1 ] = this.prop("args"),
                 value = attribute.Value();
 
             if(Array.isArray(value)) {
@@ -209,7 +208,7 @@ export default class Condition {
 
     Match(attribute) {
         if(attribute instanceof Attribute) {
-            let [ exp, flags ] = this.args,
+            let [ exp, flags ] = this.prop("args"),
                 regex = new RegExp(exp, flags),
                 value = attribute.Value();
 
@@ -221,7 +220,7 @@ export default class Condition {
 
     UUID(attribute) {
         if(attribute instanceof Attribute && attribute.UUID) {
-            let [ var1 ] = this.args,
+            let [ var1 ] = this.prop("args"),
                 value = attribute.Value();
 
             return value.UUID === var1;

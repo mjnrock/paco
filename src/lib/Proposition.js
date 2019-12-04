@@ -6,11 +6,11 @@ import Condition from "./Condition";
 export default class Proposition {
     constructor(conditions, onTrue = null, onFalse = null, onRun = null) {
         let _this = Decorators.Apply([
-            Decorators.Events
+            Decorators.State
         ]);
 
-        this.conditions = conditions;
-        this.result = false;
+        _this.prop("conditions", conditions);
+        _this.prop("result", false);
 
         _this.on("ontrue", onTrue);
         _this.on("onfalse", onFalse);
@@ -21,13 +21,13 @@ export default class Proposition {
 
     Run(attribute, { useDysjunction = true, negateResult = false, overrideAssignments = false } = {}) {
         if(arguments[ 1 ] && typeof arguments[ 1 ] !== "object") {
-            throw new Error("[Invalid Options]: The @options parameter was passed a non-object.");
+            throw new Error(`[Invalid Options]: The @options parameter was passed a non-object.`);
         }
 
         let results = [];
 
-        for(let i in this.conditions) {
-            let cond = this.conditions[ i ];
+        for(let i in this.prop("conditions")) {
+            let cond = this.prop("conditions")[ i ];
 
             if(cond instanceof Condition) {
                 if(cond.IsAssigned() && !overrideAssignments) {
@@ -36,7 +36,7 @@ export default class Proposition {
                     results.push(cond.Run(attribute));
                 }
             } else {
-                throw new Error("[Invalid Condition Type]: Proposition.conditions contains entries that are not of type <Condition>");
+                throw new Error(`[Invalid Condition Type]: Proposition.conditions contains entries that are not of type <Condition>`);
             }
         }
 
@@ -47,6 +47,8 @@ export default class Proposition {
             result = results.reduce((a, v) => a && v);
         }
         result = negateResult ? !result : result;
+
+        this.prop("result", result);
 
         let resultObj = {
             result: result,
