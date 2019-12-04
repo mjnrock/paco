@@ -49,4 +49,33 @@ export default class Proposition {
             }
         }
     }
+
+    RunAnd(attribute, { negateResult = false, overrideAssignments = false } = {}) {
+        return this.Run(attribute, {
+            useDysjunction: false,
+            negateResult,
+            overrideAssignments
+        });
+    }
+    RunNotAnd(attribute, overrideAssignments = false) {
+        return this.Run(attribute, {
+            useDysjunction: false,
+            negateResult: true,
+            overrideAssignments
+        });
+    }
+    RunOr(attribute, { negateResult = false, overrideAssignments = false } = {}) {
+        return this.Run(attribute, {
+            useDysjunction: true,
+            negateResult,
+            overrideAssignments
+        });
+    }
+    RunNotOr(attribute, overrideAssignments = false) {
+        return this.Run(attribute, {
+            useDysjunction: true,
+            negateResult: true,
+            overrideAssignments
+        });
+    }
 };

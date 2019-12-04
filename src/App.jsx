@@ -49,11 +49,14 @@ let a = new Lib.NumberAttribute(1, 0, 10),
         () => console.log("NO")
     );
 
-console.log(p.Run(a, {
-    useDysjunction: false,
-    negateResult: true
-}));
-console.log(p.Run(a));
+// console.log(p.Run(a, {
+//     useDysjunction: false,
+//     negateResult: true
+// }));
+console.log(p.RunAnd(a));
+console.log(p.RunOr(a));
+console.log(p.RunNotAnd(a));
+console.log(p.RunNotOr(a));
 
 // c.Assign(a);
 // c.Unassign();1
