@@ -1,4 +1,4 @@
-import Decorators from "../../../../lib/decorators";
+import Decorators from "./decorators";
 
 export default class Attribute {
     constructor(value) {

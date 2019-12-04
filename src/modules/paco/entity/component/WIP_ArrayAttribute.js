@@ -1,6 +1,6 @@
 //!ANCHOR This needs to be converted from implicit number attribute to proper ArrayAttribute
 
-import Attribute from "./Attribute";
+import Attribute from "../../../../lib/Attribute";
 import Decorators from "../../../../lib/decorators";
 
 export default class ArrayAttribute extends Attribute {

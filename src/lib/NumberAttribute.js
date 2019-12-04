@@ -7,9 +7,9 @@ export default class NumberAttribute extends Attribute {
         this.prop("min", min);
         this.prop("max", max);
 
-        this.on("prop-change:value:zero");
-        this.on("prop-change:value:min");
-        this.on("prop-change:value:max");
+        this.on("prop-change::zero");
+        this.on("prop-change::min");
+        this.on("prop-change::max");
 
         return this;
     }
@@ -105,15 +105,15 @@ export default class NumberAttribute extends Attribute {
         if((min !== null && min !== void 0) && newValue <= min) {
             newValue = min;
 
-            this.call("prop-change:value:min", newValue, oldValue);
+            this.call("prop-change::min", newValue, oldValue);
         }
         if((max !== null && max !== void 0) && newValue >= max) {
             newValue = max;
             
-            this.call("prop-change:value:max", newValue, oldValue);
+            this.call("prop-change::max", newValue, oldValue);
         }
         if(newValue === 0) {
-            this.call("prop-change:value:zero", newValue, oldValue);
+            this.call("prop-change::zero", newValue, oldValue);
         }
 
         return this;
