@@ -16,11 +16,4 @@ export default class Attribute {
 
         return this.prop("value", value);
     }
-
-    change(prop, newValue, oldValue) {
-        this.prop(prop, newValue);
-        this.call("attribute:change", prop, newValue, oldValue);
-
-        return this;
-    }
 };

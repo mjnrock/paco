@@ -4,6 +4,7 @@ import { inject, observer } from "mobx-react";
 // import useImage from "use-image";
 
 import Attribute from "./modules/paco/entity/component/Attribute";
+import NumberAttribute from "./modules/paco/entity/component/NumberAttribute";
 import TextAttribute from "./modules/paco/entity/component/TextAttribute";
 // const [ image ] = useImage("./assets/images//pusheen.png");
 
@@ -13,32 +14,21 @@ import TextAttribute from "./modules/paco/entity/component/TextAttribute";
 //     return <Image image={image} { ...props } />;
 // };
 
-let a = new TextAttribute("Cats", "Bob");
+let a = new NumberAttribute(1, 0, 10);
 
 a.listen("prop-change", ([ t, n, o ]) => console.log(t, n, o));
+a.listen("attribute:min", ([ t, n, o ]) => console.log("MIN", n, o));
+a.listen("attribute:max", ([ t, n, o ]) => console.log("MAX", n, o));
+a.listen("attribute:zero", ([ t, n, o ]) => console.log("ZERO", n, o));
 
-a.Name("Casdfsdf");
-a.Value(123);
-a.Value(456);
-a.Value(789);
+a.Min(-1);
+a.Max(10);
 
-// console.log(a._state);
-// a.Current("Fish");
-// a.Current("Cheese");
-// a.Current("Dog");
-
-// a.listen("attribute:min", ([ t, n, o ]) => console.log("MIN", n, o));
-// a.listen("attribute:max", ([ t, n, o ]) => console.log("MAX", n, o));
-// a.listen("attribute:zero", ([ t, n, o ]) => console.log("ZERO", n, o));
-
-// a.setMin(-1);
-// a.setMax(10);
-
-// a.dec(3);
-// a.inc(500);
-// a.value(0);
-// a.value(10);
-// a.value(-1);
+a.dec(3);
+a.inc(500);
+a.Value(0);
+a.Value(10);
+a.Value(-1);
 
 // console.log(a);
 // console.log(a.value());

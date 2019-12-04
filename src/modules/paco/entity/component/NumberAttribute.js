@@ -75,6 +75,7 @@ export default class NumberAttribute extends Attribute {
     isFull() {
         return this.prop("value") === this.prop("max");
     }
+
     inc(value = 1) {
         let oldValue = this.Value(),
             newValue = oldValue + value;
@@ -88,9 +89,21 @@ export default class NumberAttribute extends Attribute {
         return this.change(newValue, oldValue);
     }
 
+    Value(value) {
+        if(value === null || value === void 0) {
+            return this.prop("value");
+        }
+
+        this.prop("value", value);
+        
+        return this.change(value, this.prop("value"));
+    }
+
     change(newValue, oldValue) {
         let min = this.Min(),
             max = this.Max();
+
+        console.log(min, max);
 
         if((min !== null && min !== void 0) && newValue <= min) {
             newValue = min;
@@ -105,9 +118,6 @@ export default class NumberAttribute extends Attribute {
         if(newValue === 0) {
             this.call("attribute:zero", newValue, oldValue);
         }
-
-        this.Value(newValue);
-        this.call("attribute:change", newValue, oldValue);
 
         return this;
     }
