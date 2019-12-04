@@ -38,16 +38,25 @@ export default class Proposition {
         } else {
             result = results.reduce((a, v) => a && v);
         }
+        result = negateResult ? !result : result;
 
-        return {
-            result: negateResult ? !result : result,
+        let resultObj = {
+            result: result,
             results: result,
             options: {
                 useDysjunction,
                 negateResult,
                 overrideAssignments
             }
+        };
+
+        if(result && typeof this.callbacks.ontrue === "function") {
+            this.callbacks.ontrue(resultObj);
+        } else if(!result && typeof this.callbacks.onfalse === "function") {
+            this.callbacks.onfalse(resultObj);
         }
+
+        return resultObj;
     }
 
     RunAnd(attribute, { negateResult = false, overrideAssignments = false } = {}) {
