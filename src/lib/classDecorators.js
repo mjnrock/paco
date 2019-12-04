@@ -1,6 +1,9 @@
 import { GenerateUUID } from "./helper";
 
+//? This is the important base function for inheritence
+//? e.g.  export default class Attribute extends ClassDecorators.Events(ClassDecorators.State(ClassDecorators.DecoratorBase)) {}
 class DecoratorBase {}
+
 const Events = (Events) => class extends Events {
     constructor() {
         super();

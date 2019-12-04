@@ -1,5 +1,6 @@
 
 import Decorators from "./decorators";
+import ClassDecorators from "./classDecorators";
 import Helper from "./helper";
 
 import Attribute from "./Attribute";
@@ -11,6 +12,7 @@ import Proposition from "./Proposition";
 
 export default {
     Decorators,
+    ClassDecorators,
     Helper,
 
     Attribute,

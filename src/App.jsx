@@ -30,6 +30,8 @@ import Lib from "./lib/package";
 // a.Value(-1);
 
 let a = new Lib.NumberAttribute(1, 0, 10),
+    a2 = new Lib.NumberAttribute(3, 1, 9),
+    a3 = new Lib.NumberAttribute(5, 2, 8),
     c = new Lib.Condition(
         Lib.Condition.EnumType.IN,
         1, 5, 3
@@ -50,6 +52,8 @@ let a = new Lib.NumberAttribute(1, 0, 10),
     );
 
 console.log(a);
+console.log(a2);
+console.log(a3);
 
 a.Value(15);
 a.Value(5);
