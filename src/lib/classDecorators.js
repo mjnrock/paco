@@ -21,7 +21,7 @@ class DecoratorBase {
     UUID(uuid = null) {
         if(uuid === true) {
             this._uuid = GenerateUUID();
-        } else if(uuid !== null) {
+        } else if(uuid !== null && uuid !== void 0) {
             let regex = new RegExp(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/, "i");
 
             if(regex.test(uuid)) {
