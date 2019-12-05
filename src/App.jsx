@@ -177,7 +177,7 @@ class App extends Component {
                 <div>Cats</div>
                 <canvas
                     id="canvas"
-                    width={ 1500 }
+                    width={ 900 }
                     height={ 2000 }
                 ></canvas>
             </div>
