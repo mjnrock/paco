@@ -63,8 +63,6 @@ export async function LoadImages(
                     canvas.setAttribute("tile-w", wmax);
                     canvas.setAttribute("tile-h", hmax);
                 });
-
-            return canvas;
         }
 
         return resolutions;
