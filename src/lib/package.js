@@ -10,6 +10,8 @@ import NumberAttribute from "./NumberAttribute";
 import Condition from "./Condition";
 import Proposition from "./Proposition";
 
+import ImageSequencer from "./ImageSequencer";
+
 export default {
     Decorators,
     ClassDecorators,
@@ -20,5 +22,7 @@ export default {
     NumberAttribute,
 
     Condition,
-    Proposition
+    Proposition,
+
+    ImageSequencer
 };
