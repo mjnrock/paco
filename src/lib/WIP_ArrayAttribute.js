@@ -1,7 +1,7 @@
 //!ANCHOR This needs to be converted from implicit number attribute to proper ArrayAttribute
 
-import Attribute from "../../../../lib/Attribute";
-import Decorators from "../../../../lib/decorators";
+import Attribute from "./Attribute";
+import Decorators from "./decorators";
 
 export default class ArrayAttribute extends Attribute {
     constructor(values = [], min = null, max = null) {
