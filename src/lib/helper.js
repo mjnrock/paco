@@ -20,7 +20,7 @@ export async function LoadImages(
     } = {}
 ) {
     if(Array.isArray(uri)) {
-        let promises = uri.map(u => LoadImage(`${ baseURI }${ u }`)),
+        let promises = uri.map(u => LoadImage(u, baseURI)),
             resolutions = Promise.all(promises);
 
         if(canvas) {
@@ -72,12 +72,12 @@ export async function LoadImages(
 
     return LoadImage(uri);
 }
-export async function LoadImage(uri) {
+export async function LoadImage(uri, baseURI = `./assets/images/`) {
     return new Promise((resolve, reject) => {
         let img = new Image();
         img.onload = () => resolve(img);
         img.onerror = reject;
-        img.src = uri;
+        img.src = `${ baseURI }${ uri }`;
     });
 }
 
