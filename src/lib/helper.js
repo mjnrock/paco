@@ -7,9 +7,9 @@ export function GenerateUUID() {
     });
 }
 
-export async function LoadImages(uri, canvas = null, { type = "row", x = 0, y = 0, padX = 0, padY = 0 } = {}) {
+export async function LoadImages(uri, canvas = null, { type = "row", x = 0, y = 0, padX = 0, padY = 0, baseURI = `./assets/images` } = {}) {
     if(Array.isArray(uri)) {
-        let promises = uri.map(u => LoadImage(u)),
+        let promises = uri.map(u => LoadImage(`${ baseURI }/${ u }`)),
             resolutions = Promise.all(promises);
 
         if(canvas) {

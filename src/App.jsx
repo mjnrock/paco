@@ -149,15 +149,15 @@ class App extends Component {
         //     `./assets/images/raccoon.png`
         // ], canvas);
         Lib.Helper.LoadImages([
-            `./assets/images/raccoon.png`,
-            `./assets/images/raccoon.png`,
-            `./assets/images/raccoon.png`,
-            `./assets/images/raccoon.png`,
-            `./assets/images/raccoon.png`,
-            `./assets/images/raccoon.png`,
-            `./assets/images/raccoon.png`,
-            `./assets/images/raccoon.png`,
-            `./assets/images/pusheen.png`
+            `raccoon.png`,
+            `raccoon.png`,
+            `raccoon.png`,
+            `raccoon.png`,
+            `raccoon.png`,
+            `raccoon.png`,
+            `raccoon.png`,
+            `raccoon.png`,
+            `pusheen.png`
         ], canvas, {
             type: "wrap"
         });
@@ -169,7 +169,7 @@ class App extends Component {
                 <div>Cats</div>
                 <canvas
                     id="canvas"
-                    width={ 400 }
+                    width={ 750 }
                     height={ 1000 }
                 ></canvas>
             </div>
