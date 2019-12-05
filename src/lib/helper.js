@@ -60,8 +60,10 @@ export async function LoadImages(
                         }
                     }
 
-                    canvas.setAttribute("tile-w", wmax);
-                    canvas.setAttribute("tile-h", hmax);
+                    if(canvas.setAttribute) {
+                        canvas.setAttribute("tile-w", wmax);
+                        canvas.setAttribute("tile-h", hmax);
+                    }
                 });
         }
 
