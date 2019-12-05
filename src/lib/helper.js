@@ -15,7 +15,9 @@ export async function LoadImages(uri, canvas = null, { type = "row", x = 0, y = 
         if(canvas) {
             let ctx = canvas.getContext("2d"),
                 wmax = 0,
-                hmax = 0;
+                hmax = 0,
+                x0 = x,
+                y0 = y;
 
             resolutions
                 .then(images => {                    
@@ -40,7 +42,7 @@ export async function LoadImages(uri, canvas = null, { type = "row", x = 0, y = 
                         } else if(type === "wrap") {
                             if(x + (wmax * 2) + padX > canvas.width) {
                                 y += hmax + padY;
-                                x = 0;
+                                x = x0;
                             } else {
                                 x += wmax + padX;
                             }
