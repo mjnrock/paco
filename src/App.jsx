@@ -116,13 +116,13 @@ class App extends Component {
         this.state.x.Range(0 - 225, 1280 - 300);
         this.state.y.Range(0 - 225, 1280 - 300);
 
-        let a = this.state.x.watch("value", () => {
-            if(Math.random() * 100 > 95) {
-                console.log("YES")
-            }
-        });
+        // let a = this.state.x.watch("value", () => {
+        //     if(Math.random() * 100 > 95) {
+        //         console.log("YES")
+        //     }
+        // });
 
-        console.log(a);
+        // console.log(a);
         // console.log(this.state.x.unwatch("value", a));
 
         document.onkeydown = e => {
@@ -146,45 +146,45 @@ class App extends Component {
         };
 
         //? Example implementation to override the "onkeydown > repeat" timer to thus allow for smooth movement
-        setInterval(() => {
-            let { x, y, keys } = this.state,
-                step = 6;
+        // setInterval(() => {
+        //     let { x, y, keys } = this.state,
+        //         step = 6;
 
-            // if(keys[ 37 ] === true) {
-            //     x.inc(-step);
-            // }
-            // if(keys[ 39 ] === true) {
-            //     x.inc(step);
-            // }
-            // if(keys[ 38 ] === true) {
-            //     y.inc(-step);
-            // }
-            // if(keys[ 40 ] === true) {
-            //     y.inc(step);
-            // }
+        //     // if(keys[ 37 ] === true) {
+        //     //     x.inc(-step);
+        //     // }
+        //     // if(keys[ 39 ] === true) {
+        //     //     x.inc(step);
+        //     // }
+        //     // if(keys[ 38 ] === true) {
+        //     //     y.inc(-step);
+        //     // }
+        //     // if(keys[ 40 ] === true) {
+        //     //     y.inc(step);
+        //     // }
 
-            // if(Math.random() * 100 > 95) {
-            //     console.log(x.Value(), x.Min(), x.Max());
-            //     console.log(y.Value(), y.Min(), y.Max());
-            // }
+        //     // if(Math.random() * 100 > 95) {
+        //     //     console.log(x.Value(), x.Min(), x.Max());
+        //     //     console.log(y.Value(), y.Min(), y.Max());
+        //     // }
 
-            if(x.Value() === x.Max()) {
-                x.Value(0 - 225)
-            } else {
-                x.inc(5);
-            }
-            // if(y.Value() === y.Max()) {
-            //     y.Value(0)
-            // } else {
-            //     y.inc(5);
-            // }
+        //     if(x.Value() === x.Max()) {
+        //         x.Value(0 - 225)
+        //     } else {
+        //         x.inc(5);
+        //     }
+        //     // if(y.Value() === y.Max()) {
+        //     //     y.Value(0)
+        //     // } else {
+        //     //     y.inc(5);
+        //     // }
             
-            this.setState({
-                ...this.state,
-                x,
-                y
-            });
-        }, 1000 / 60);
+        //     this.setState({
+        //         ...this.state,
+        //         x,
+        //         y
+        //     });
+        // }, 1000 / 60);
     }
 
     componentDidMount() {
