@@ -16,7 +16,8 @@ export async function LoadImages(
         y = 0,
         padX = 0,
         padY = 0, 
-        baseURI = `./assets/images/`
+        baseURI = `./assets/images/`,
+        oneach = null
     } = {}
 ) {
     if(Array.isArray(uri)) {
@@ -43,6 +44,10 @@ export async function LoadImages(
                     
                     for(let i in images) {
                         let img = images[ i ];
+
+                        if(typeof oneach === "function") {
+                            oneach(img, [ x, y, wmax, hmax, uri, canvas ]);
+                        }
 
                         ctx.drawImage(img, x, y);
 
@@ -81,8 +86,20 @@ export async function LoadImage(uri, baseURI = `./assets/images/`) {
     });
 }
 
+export function Clamp(value, min = null, max = null) {
+    if(min !== null && value < min) {
+        return min;
+    }
+    if(max !== null && value > max) {
+        return max;
+    }
+
+    return value;
+}
+
 export default {
     GenerateUUID,
     LoadImage,
-    LoadImages
+    LoadImages,
+    Clamp
 };

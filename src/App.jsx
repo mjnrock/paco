@@ -1,9 +1,7 @@
-import React, { Component } from "react";
 import { inject, observer } from "mobx-react";
-import Jimp from "jimp";
+import React, { Component } from "react";
 // import { Stage, Layer, Rect, Text, Image } from "react-konva";
 // import useImage from "use-image";
-
 import Lib from "./lib/package";
 // const [ image ] = useImage("./assets/images//pusheen.png");
 
@@ -111,13 +109,62 @@ class App extends Component {
         super(props);
 
         this.state = {
-            img: null
+            keys: [],
+            x: 0,
+            y: 0
         };
+
+        document.onkeydown = e => {
+            let { x, y, keys } = this.state;
+            
+            keys[ e.which ] = true;
+
+            this.setState({
+                ...this.state,
+                keys
+            });
+        };
+
+        document.onkeyup = e => {
+            let { x, y, keys } = this.state;
+
+            keys[ e.which ] = false;
+            this.setState({
+                ...this.state,
+                keys
+            });
+        };
+
+        //? Example implementation to override the "onkeydown > repeat" timer to thus allow for smooth movement
+        setInterval(() => {
+            let { x, y, keys } = this.state,
+                step = 13;
+
+            if(keys[ 37 ] === true) {
+                x -= step;
+            }
+            if(keys[ 39 ] === true) {
+                x += step;
+            }
+            if(keys[ 38 ] === true) {
+                y -= step;
+            }
+            if(keys[ 40 ] === true) {
+                y += step;
+            }
+            this.setState({
+                ...this.state,
+                x: Lib.Helper.Clamp(x, 0 - 225, 1280 - 300),
+                y: Lib.Helper.Clamp(y, 0 - 225, 1280 - 300)
+            });
+        }, 1000 / 30);
     }
 
     componentDidMount() {
-        let canvas = document.getElementById("canvas"),
-            ctx = canvas.getContext("2d");
+        let eCanvas = document.getElementById("entity-canvas"),
+            eCtx = eCanvas.getContext("2d");
+        let tCanvas = document.getElementById("terrain-canvas"),
+            tCtx = tCanvas.getContext("2d");
 
         // Lib.Helper.LoadImage(`./assets/images/pusheen.png`)
         //     .then(img => {
@@ -148,38 +195,73 @@ class App extends Component {
         // Lib.Helper.LoadImages([
         //     `./assets/images/raccoon.png`
         // ], canvas);
-        Lib.Helper.LoadImages([
-            `raccoon.png`,
-            `raccoon.png`,
+        let entities = Lib.Helper.LoadImages([
             `pusheen.png`,
-            `pusheen.png`,
-            `raccoon.png`,
-            `raccoon.png`,
-            `raccoon.png`,
-            `pusheen.png`,
-            `pusheen.png`,
-            `pusheen.png`,
-            `raccoon.png`,
-            `raccoon.png`,
-            `pusheen.png`,
-            `raccoon.png`,
-            `pusheen.png`,
-            `pusheen.png`,
-            `pusheen.png`,
-        ], canvas, {
-            type: "wrap"
+        ]);
+        let terrain = Lib.Helper.LoadImages([
+            `grass.png`,
+            `dirt.png`,
+        ]);
+
+        entities.then((e) => {
+            for(let i in e) {
+                let entity = e[ i ];
+
+                eCtx.drawImage(entity, 500 / 2 - 150 / 2, 500 / 2 - 150 / 2);
+            }
+        });
+        terrain.then((t) => {
+            let [ grass, dirt ] = t;
+
+            for(let i = 0; i < 128 * 10; i += 128) {
+                for(let j = 0; j < 128 * 10; j += 128) {
+                    tCtx.drawImage(Math.random() * 100 > 50 ? grass : dirt, i, j);
+                }
+            }
         });
     }
 
     render() {
         return (
             <div>
-                <div>Cats</div>
-                <canvas
-                    id="canvas"
-                    width={ 900 }
-                    height={ 2000 }
-                ></canvas>
+                <div
+                    className="ba"
+                    style={{
+                        position: "relative",
+                        top: 250,
+                        left: 250,
+                        overflow: "hidden",
+                        width: 500,
+                        height: 500,
+                        backgroundColor: "#ccc"
+                    }}
+                >                    
+                    <canvas
+                        id="entity-canvas"
+                        style={{
+                            position: "absolute",
+                            top: 0,
+                            left: 0,
+                            zIndex: 1
+                        }}
+
+                        width={ 500 }
+                        height={ 500 }
+                    ></canvas>
+
+                    <canvas
+                        id="terrain-canvas"
+                        style={{
+                            position: "absolute",
+                            top: -this.state.y,
+                            left: -this.state.x,
+                            zIndex: 0
+                        }}
+
+                        width={ 1280 }
+                        height={ 1280 }
+                    ></canvas>
+                </div>
             </div>
         );
     }
