@@ -3,6 +3,7 @@ import Condition from "./Condition";
 import Proposition from "./Proposition";
 
 import ClassDecorators from "./classDecorators";
+import { LoadImage } from "./helper";
 
 export default class ImageSequencer extends ClassDecorators.StateEvents {
     constructor(sequence = []) {

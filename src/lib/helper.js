@@ -7,7 +7,7 @@ export function GenerateUUID() {
     });
 }
 
-export async function LoadImages(
+export function LoadImages(
     uri,
     canvas = null,
     {
@@ -77,7 +77,7 @@ export async function LoadImages(
 
     return LoadImage(uri);
 }
-export async function LoadImage(uri, baseURI = `./assets/images/`) {
+export function LoadImage(uri, baseURI = `./assets/images/`) {
     return new Promise((resolve, reject) => {
         let img = new Image();
         img.onload = () => resolve(img);

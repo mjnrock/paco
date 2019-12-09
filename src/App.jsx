@@ -109,13 +109,24 @@ class App extends Component {
         super(props);
 
         this.state = {
-            keys: [],
-            x: 0,
-            y: 0
+            keys: {},
+            x: new Lib.NumberAttribute(0),
+            y: new Lib.NumberAttribute(0)
         };
+        this.state.x.Range(0 - 225, 1280 - 300);
+        this.state.y.Range(0 - 225, 1280 - 300);
+
+        let a = this.state.x.watch("value", () => {
+            if(Math.random() * 100 > 95) {
+                console.log("YES")
+            }
+        });
+
+        console.log(a);
+        // console.log(this.state.x.unwatch("value", a));
 
         document.onkeydown = e => {
-            let { x, y, keys } = this.state;
+            let { keys } = this.state;
             
             keys[ e.which ] = true;
 
@@ -124,9 +135,8 @@ class App extends Component {
                 keys
             });
         };
-
         document.onkeyup = e => {
-            let { x, y, keys } = this.state;
+            let { keys } = this.state;
 
             keys[ e.which ] = false;
             this.setState({
@@ -138,26 +148,43 @@ class App extends Component {
         //? Example implementation to override the "onkeydown > repeat" timer to thus allow for smooth movement
         setInterval(() => {
             let { x, y, keys } = this.state,
-                step = 13;
+                step = 6;
 
-            if(keys[ 37 ] === true) {
-                x -= step;
+            // if(keys[ 37 ] === true) {
+            //     x.inc(-step);
+            // }
+            // if(keys[ 39 ] === true) {
+            //     x.inc(step);
+            // }
+            // if(keys[ 38 ] === true) {
+            //     y.inc(-step);
+            // }
+            // if(keys[ 40 ] === true) {
+            //     y.inc(step);
+            // }
+
+            // if(Math.random() * 100 > 95) {
+            //     console.log(x.Value(), x.Min(), x.Max());
+            //     console.log(y.Value(), y.Min(), y.Max());
+            // }
+
+            if(x.Value() === x.Max()) {
+                x.Value(0 - 225)
+            } else {
+                x.inc(5);
             }
-            if(keys[ 39 ] === true) {
-                x += step;
-            }
-            if(keys[ 38 ] === true) {
-                y -= step;
-            }
-            if(keys[ 40 ] === true) {
-                y += step;
-            }
+            // if(y.Value() === y.Max()) {
+            //     y.Value(0)
+            // } else {
+            //     y.inc(5);
+            // }
+            
             this.setState({
                 ...this.state,
-                x: Lib.Helper.Clamp(x, 0 - 225, 1280 - 300),
-                y: Lib.Helper.Clamp(y, 0 - 225, 1280 - 300)
+                x,
+                y
             });
-        }, 1000 / 30);
+        }, 1000 / 60);
     }
 
     componentDidMount() {
@@ -253,8 +280,8 @@ class App extends Component {
                         id="terrain-canvas"
                         style={{
                             position: "absolute",
-                            top: -this.state.y,
-                            left: -this.state.x,
+                            left: -this.state.x.Value(),
+                            top: -this.state.y.Value(),
                             zIndex: 0
                         }}
 

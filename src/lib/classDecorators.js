@@ -102,53 +102,75 @@ const Events = (Events) => class extends Events {
      * });
      * @param {string} event 
      * @param {fn} callback 
+     * @returns {uuid}
      */
     listen(event, callback) {
-        if(!Array.isArray(this._listeners[ event ])) {
-            this._listeners[ event ] = [];
+        if(typeof this._listeners[ event ] !== "object") {
+            this._listeners[ event ] = {};
         }
+        // if(!Array.isArray(this._listeners[ event ])) {
+        //     this._listeners[ event ] = [];
+        // }
 
-        this._listeners[ event ].push(callback);
+        let uuid = GenerateUUID();
+        this._listeners[ event ][ uuid ] = callback;
 
-        return this;
+        return uuid;
     }
-    unlisten(event, target) {
-        throw new Error("This method has not been setup yet.  Implement a search system, maybe use UUIDs?");
+    unlisten(event, uuid) {
+        // throw new Error("This method has not been setup yet.  Implement a search system, maybe use UUIDs?");        
+        if(typeof this._listeners[ event ] === "object") {
+            delete this._listeners[ event ][ uuid ];
+            
+            return true;
+        }
+        
+        return false;
     }
 
     /**
-     * Attach a listener to watch a state property
+     * Attach listener(s) to watch a state property, returning the registry UUID(s) of the attachment(s).  If 
      * 
      * Example:
      * a.watch([ "cat", "dog" ], (key, value) => {
      *     console.log(key, value)
      * });
      * @param {string|Array} prop 
-     * @param {fn} callback 
+     * @param {fn} callback
+     * @returns {uuid|uuids} If `Array.isArray(prop)`, then `@uuids = { prop: uuid, ... }`, else `@uuid = uuid`
      */
     watch(prop, callback) {
         if(Array.isArray(prop)) {
+            let uuids = {};
+
             prop.forEach(p => {
-                this.listen("prop-change", ([ key, value ], [ event, target ]) => {
+                uuids[ p ] = this.listen("prop-change", ([ key, value ], [ event, target ]) => {
                     if(p === key && typeof callback === "function") {
                         callback(key, value, target);
                     }
                 });
             });
 
-            return this;
+            return uuids;
         }
         
-        this.listen("prop-change", ([ key, value ], [ event, target ]) => {
+        let uuid = this.listen("prop-change", ([ key, value ], [ event, target ]) => {
             if(prop === key && typeof callback === "function") {
                 callback(key, value, target);
             }
         });
         
-        return this;
+        return uuid;
     }
-    unwatch(prop) {
-        throw new Error("This method has not been setup yet.  Implement a search system, maybe use UUIDs?");
+    unwatch(prop, uuid) {
+        // throw new Error("This method has not been setup yet.  Implement a search system, maybe use UUIDs?");
+        if(typeof this._listeners[ "prop-change" ] === "object") {
+            delete this._listeners[ "prop-change" ][ uuid ];
+            
+            return true;
+        }
+        
+        return false;
     }
 }
 

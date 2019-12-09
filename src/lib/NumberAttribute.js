@@ -1,3 +1,4 @@
+import { Clamp } from "./helper";
 import Attribute from "./Attribute";
 
 export default class NumberAttribute extends Attribute {
@@ -20,26 +21,33 @@ export default class NumberAttribute extends Attribute {
         return this;
     }
 
+    //  The clamping is mediated by this.change()
     Value(value) {
         if(value === null || value === void 0) {
             return this.prop("value");
         }
 
-        return this.prop("value", value);
+        return this.change(value, this.prop("value"));
     }
-    Min(value) {
-        if(value === null || value === void 0) {
+    Min(min) {
+        if(min === null || min === void 0) {
             return this.prop("min");
         }
 
-        return this.prop("min", value);
+        return this.prop("min", min);
     }
-    Max(value) {
-        if(value === null || value === void 0) {
+    Max(max) {
+        if(max === null || max === void 0) {
             return this.prop("max");
         }
 
-        return this.prop("max", value);
+        return this.prop("max", max);
+    }
+    Range(min, max) {
+        this.Min(min);
+        this.Max(max);
+        
+        return this;
     }
 
     add(value) {
@@ -86,34 +94,28 @@ export default class NumberAttribute extends Attribute {
         return this.change(newValue, oldValue);
     }
 
-    // eslint-disable-next-line
-    Value(value) {
-        if(value === null || value === void 0) {
-            return this.prop("value");
-        }
-
-        this.prop("value", value);
-
-        return this.change(value, this.prop("value"));
-    }
-
     change(newValue, oldValue) {
         let min = this.Min(),
             max = this.Max();
-
+           
+        //  min clamp, on min
         if((min !== null && min !== void 0) && newValue <= min) {
             newValue = min;
 
             this.call("prop-change::min", newValue, oldValue);
         }
+        //  max clamp, on max
         if((max !== null && max !== void 0) && newValue >= max) {
             newValue = max;
             
             this.call("prop-change::max", newValue, oldValue);
         }
+        //  on zero
         if(newValue === 0) {
             this.call("prop-change::zero", newValue, oldValue);
         }
+
+        this.prop("value", newValue);
 
         return this;
     }
