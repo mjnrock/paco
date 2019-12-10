@@ -82,7 +82,7 @@ export default class Condition {
                 }
 
                 if(typeof this.hasEvent("onrun")) {
-                    (async () => this.call("onrun", this.prop("result")))();
+                    this.call("onrun", this.prop("result"));
                 }
 
                 return this.prop("result");

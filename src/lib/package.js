@@ -3,6 +3,8 @@ import Decorators from "./decorators";
 import ClassDecorators from "./classDecorators";
 import Helper from "./helper";
 
+import Subscription from "./Subscription";
+
 import Attribute from "./Attribute";
 import TextAttribute from "./TextAttribute";
 import NumberAttribute from "./NumberAttribute";
@@ -16,6 +18,8 @@ export default {
     Decorators,
     ClassDecorators,
     Helper,
+
+    Subscription,
 
     Attribute,
     TextAttribute,

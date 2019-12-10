@@ -1,4 +1,7 @@
 import { GenerateUUID } from "./helper";
+import Subscription from "./Subscription";
+
+//TODO Use Subscriptions to track this any watching behavior, utilize the Subscription specific to each class
 
 //? This is the important base function for inheritence
 //? e.g.  export default class Attribute extends ClassDecorators.Events(ClassDecorators.State(ClassDecorators.DecoratorBase)) {}
@@ -6,6 +9,18 @@ class DecoratorBase {
     constructor() {
         this._id;   // A generic id for any purpose
         this._uuid = GenerateUUID();
+        this._modules = [];
+    }
+
+    _registerModule(code) {
+        if(!this._modules.includes(code)) {
+            this._modules.push(code);
+        }
+
+        return this;
+    }
+    _hasModule(code) {
+        return this._modules.includes(code);
     }
 
     ID(id = null) {
@@ -47,6 +62,8 @@ const Events = (Events) => class extends Events {
         };
 
         this._listeners = {};
+
+        this._registerModule("events");
     }
 
     hasEvent(name) {
@@ -179,6 +196,8 @@ const State = (State) => class extends State {
         super();
         
         this._state = {};
+
+        this._registerModule("state");
     }
 
     setState(state = {}) {
@@ -223,6 +242,8 @@ const Meta = (Meta) => class extends Meta {
         super();
 
         this._meta = {};
+
+        this._registerModule("meta");
     }
 
     setMeta(meta = {}) {
@@ -247,6 +268,8 @@ const Behavior = (Behavior) => class extends Behavior {
         super();
         
         this._actions = {};
+
+        this._registerModule("behavior");
     }
 
     getAction() {
@@ -286,6 +309,8 @@ const Progeny = (Progeny) => class extends Progeny {
         
         this._children = {};
         this._parent = null;
+
+        this._registerModule("progeny");
     }
 
     birth(child) {
@@ -345,6 +370,8 @@ const Group = (Group) => class extends Group {
             "receive": null,
             "broadcast": null
         };
+
+        this._registerModule("group");
     }
 
     groupMap(prop, fn) {
