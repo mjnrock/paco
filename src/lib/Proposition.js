@@ -1,22 +1,18 @@
-import Decorators from "./decorators";
+import ClassDecorators from "./classDecorators";
 
 import Attribute from "./Attribute";
 import Condition from "./Condition";
 
-export default class Proposition {
+export default class Proposition extends ClassDecorators.StateEvents {
     constructor(conditions, onTrue = null, onFalse = null, onRun = null) {
-        let _this = Decorators.Apply([
-            Decorators.State
-        ]);
+        super();
+        
+        this.prop("conditions", conditions);
+        this.prop("result", false);
 
-        _this.prop("conditions", conditions);
-        _this.prop("result", false);
-
-        _this.on("ontrue", onTrue);
-        _this.on("onfalse", onFalse);
-        _this.on("onrun", onRun);
-
-        return Decorators.Merge(this, _this);
+        this.on("true", onTrue);
+        this.on("false", onFalse);
+        this.on("run", onRun);
     }
 
     Run(attribute, { useDysjunction = true, negateResult = false, overrideAssignments = false } = {}) {
@@ -60,14 +56,14 @@ export default class Proposition {
             }
         };
 
-        if(this.hasEvent("onrun")) {
-            this.call("onrun", resultObj);
+        if(this.hasEvent("run")) {
+            this.call("run", resultObj);
         }
 
-        if(result && this.hasEvent("ontrue")) {
-            this.call("ontrue", resultObj);
-        } else if(!result && this.hasEvent("onfalse")) {
-            this.call("onfalse", resultObj);
+        if(result && this.hasEvent("true")) {
+            this.call("true", resultObj);
+        } else if(!result && this.hasEvent("false")) {
+            this.call("false", resultObj);
         }
 
         return resultObj;

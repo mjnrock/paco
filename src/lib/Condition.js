@@ -1,8 +1,8 @@
-import Decorators from "./decorators";
+import ClassDecorators from "./classDecorators";
 
 import Attribute from "./Attribute";
 
-export default class Condition {
+export default class Condition extends ClassDecorators.StateEvents {
     //? [ Function, Expected this.args.length, Supported types ]
     static EnumType = {
         EQUALS: [ "Equals", 1, [ "string", "number", "boolean" ] ],
@@ -21,22 +21,18 @@ export default class Condition {
     };
 
     constructor(type, ...args) {
-        let _this = Decorators.Apply([
-            Decorators.State
-        ]);
+        super();
         
         //  Use Condition.EnumTypes.[ ... ] as @type argument
-        _this.prop("type", type);
+        this.prop("type", type);
         //  Variable amount of arguments, specified by Condition.EnumTypes.[ ... ][ 1 ]
-        _this.prop("args", args);
+        this.prop("args", args);
         //  The result of the last .Run() or the initial condition
-        _this.prop("result", false);
+        this.prop("result", false);
         //  Optionally use .Assign() to store an <Attribute> association locally
-        _this.prop("attribute", null);
+        this.prop("attribute", null);
 
-        _this.on("onrun");
-
-        return Decorators.Merge(this, _this);
+        this.on("run");
     }
 
     IsAssigned() {
@@ -81,8 +77,8 @@ export default class Condition {
                     this.prop("result", fn(attribute));
                 }
 
-                if(typeof this.hasEvent("onrun")) {
-                    this.call("onrun", this.prop("result"));
+                if(typeof this.hasEvent("run")) {
+                    this.call("run", this.prop("result"));
                 }
 
                 return this.prop("result");

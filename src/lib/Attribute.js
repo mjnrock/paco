@@ -9,11 +9,15 @@ export default class Attribute extends ClassDecorators.StateEvents {
         return this;
     }
 
-    Value(value) {
-        if(value === null || value === void 0) {
+    Value(input) {
+        if(input === null || input === void 0) {
             return this.prop("value");
         }
 
-        return this.prop("value", value);
+        if(typeof input === "function") {
+            return this.prop("value", input(this.prop("value"), this));
+        }
+
+        return this.prop("value", input);
     }
 };
